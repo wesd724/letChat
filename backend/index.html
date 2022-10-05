@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        #message {
+            padding: 0px;
+        }
+        #message > li {
+            list-style: none;
+            border: 1px solid skyblue;
+            margin-bottom: 1px;
+        }
+    </style>
+</head>
+<body>
+    <form id="form" action="">
+        <input id="input" autocomplete="off" /><button>send</button>
+    </form>
+    <ul id="message"></ul>
+</body>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
+
+    const form = document.getElementById('form');
+    const input = document.getElementById('input');
+    const messege = document.getElementById('message');
+
+    form.addEventListener('submit', function (e) {
+        if (input.value) {
+            socket.emit('letChat', input.value);
+            input.value = '';
+        }
+        e.preventDefault();
+    });
+
+    socket.on('show', (msg) => {
+        const liTag = document.createElement('li');
+        liTag.textContent = msg;
+        messege.appendChild(liTag);
+    })
+</script>
+
+</html>
